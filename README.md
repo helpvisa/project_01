@@ -1,2 +1,2 @@
-# project_01
-UofT SCS Coding Bootcamp Project 1
+# Up N' Coming Music Finder
+Find artists similar to the ones you already love and give them a listen and a helping hand.
