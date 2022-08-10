@@ -1,0 +1,1 @@
+var lastFmApiKey = "3e097c528fbffe98b64806d2fe264b7b";
