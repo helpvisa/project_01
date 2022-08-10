@@ -1,0 +1,15 @@
+# vscode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+.history/
+*.vsix
+
+# mac os
+.DS_STORE
+
+# swp files
+*.swp
