@@ -6,26 +6,32 @@ var apiTestString = "Pavement"; // test querying results using this string
 var keyLastFM = "3e097c528fbffe98b64806d2fe264b7b";
 var keyYoutube = "AIzaSyDtyonSH-2_xkCFFv7-WEpBHrro1tawGlI";
 
-
 //-----------------------
 // main body of code
 //-----------------------
 
 // test lastFM api
-queryLastFM(apiTestString, 0);
-queryLastFM(apiTestString, 1);
-queryLastFM(apiTestString, 2);
-queryLastFM(apiTestString, 3);
+queryLastFM(apiTestString, 1).then(function(data) {
+    //console.log(data.similarartists.artist);
+    sortSimilarArtists(data.similarartists.artist).then(function(artists) {
+        console.log(artists);
+    });
+});
 
 // test youtube API
-searchYoutube(apiTestString);
+/*
+searchYoutube(apiTestString).then(function(data) {
+    console.log(data);
+});
+*/
 
 //-----------------------
 // function declarations
 //-----------------------
 
+//---api functions---//
 // fetch results from the lastfm api (artist info, similar artists, top albums and tracks)
-function queryLastFM(artist, mode) {
+async function queryLastFM(artist, mode) { // returns data object
     // what part of the api do you want to query?
     // options are:
     // 0. getinfo
@@ -55,10 +61,10 @@ function queryLastFM(artist, mode) {
             break;
     }
     // perform api call
-    fetch(url).then(function(response) {
+    return fetch(url).then(function(response) { // returns promise
         if (response.ok) {
-            response.json().then(function(data) {
-                console.log(data);
+            return response.json().then(function(data) {
+                return data;
             });
         } else {
             alert("No artist found.");
@@ -70,20 +76,22 @@ function queryLastFM(artist, mode) {
 }
 
 // do a search with the youtube API
-function searchYoutube(artist) {
+async function searchYoutube(artist) { // returns data object
     // encoding the artist names to remove spaces or special character with query string safe characters
     artist = encodeURI(artist);
 
     var url = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=" + artist + "&type=video&key=" + keyYoutube;
 
-    // query the youtube API
-    fetch(url).then(function(response) {
+    // query the youtube API; return this promise
+    return fetch(url).then(function(response) {
         if (response.ok) {
-            response.json().then(function(data) {
-                console.log(data);
+            return response.json().then(function(data) {
+                return data;
                 // ^ above returns array of found items; data.items[0].id.videoId is the video's youtube id
                 // the videoId can be used to construct a URL as such:
-                // "https://www.youtube.com/watch?v=" + videoId
+                // "https://www.youtube.com/watch?v=" + videoId;
+                // or an embed as such:
+                // "https://www.youtube.com/embed/" + videoId;
             });
         } else {
             alert("No search results found.");
@@ -92,4 +100,31 @@ function searchYoutube(artist) {
         // error fetching api data
         alert(error + " // Could not connect to the YouTube API.");
     });
+}
+
+//---sorting functions---//
+// sorts given array of artists by amount of listeners
+async function sortSimilarArtists(similar) {
+    var artistArray = [];
+    for (i = 0; i < similar.length; i++) {
+        var name = similar[i].name;
+        // fetch artist data from name
+        var response = await queryLastFM(name, 0); // await a response (pause code until one is received)
+        var artist = await response.artist; // assign the artist from the return json response
+        artistArray.push(artist); // add it to the array of similar artists
+    }
+    
+    // now sort the array of similar artists, from least to most listeners, and return it
+    artistArray.sort(compareListeners);
+    return artistArray;
+}
+
+// sort algo
+// given an array of artists, will sort them from lowest to highest listeners
+function compareListeners(a, b) {
+    if (a.stats.listeners > b.stats.listeners)
+        return 1;
+    if (a.stats.listeners < b.stats.listeners)
+        return -1;
+    return 0;
 }
