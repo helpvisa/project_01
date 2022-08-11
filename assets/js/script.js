@@ -34,8 +34,7 @@ function queryLastFM(artist, mode) {
     // 3. gettoptracks
     // if none of these are provided, api will always return getinfo
     var url;
-    // replace spaces with + signs, make sure special characters are parsed properly
-    artist = artist.replaceAll(" ", "+");
+    // encoding the artist names to remove spaces or special character with query string safe characters
     artist = encodeURI(artist);
     // construct url based on which part of the api you have selected to query
     switch (mode) {
@@ -72,8 +71,7 @@ function queryLastFM(artist, mode) {
 
 // do a search with the youtube API
 function searchYoutube(artist) {
-    // replace spaces with + signs, make sure special characters are parsed properly
-    artist = artist.replaceAll(" ", "+");
+    // encoding the artist names to remove spaces or special character with query string safe characters
     artist = encodeURI(artist);
 
     var url = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=" + artist + "&type=video&key=" + keyYoutube;
