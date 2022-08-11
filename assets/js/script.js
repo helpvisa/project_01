@@ -6,7 +6,6 @@ var apiTestString = "Pavement"; // test querying results using this string
 var keyLastFM = "3e097c528fbffe98b64806d2fe264b7b";
 var keyYoutube = "AIzaSyDtyonSH-2_xkCFFv7-WEpBHrro1tawGlI";
 
-
 //-----------------------
 // main body of code
 //-----------------------
@@ -62,7 +61,7 @@ async function queryLastFM(artist, mode) { // returns data object
             break;
     }
     // perform api call
-    return fetch(url).then(function(response) {
+    return fetch(url).then(function(response) { // returns promise
         if (response.ok) {
             return response.json().then(function(data) {
                 return data;
