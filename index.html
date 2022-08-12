@@ -4,31 +4,166 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic.min.css" integrity="sha512-LeCmts7kEi09nKc+DwGJqDV+dNQi/W8/qb0oUSsBLzTYiBwxj0KBlAow2//jV7jwEHwSCPShRN2+IWwWcn1x7Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="./assets/css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css" integrity="sha512-EZLkOqwILORob+p0BXZc+Vm3RgJBOe1Iq/0fiI7r/wJgzOFZMlsqTa29UEl6v6U6gsV4uIpsNZoV32YZqrCRCQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Up-N-Coming</title>
 </head>
 <body>
-    <header>
-        <form>
-            <input text="" name="" id=""></input>
-            <button id=""></button>
-        </form>
+    <!-- Search Bar Section -->
+    <header class="container width my-5">
+            <form class="field is-grouped columns is-gapless" id="search-form">
+                <div class="control column is-half">
+                    <input class="input" type="text" placeholder="Artist">
+                  </div>
+                  <div class="control column">
+                    <button class="button is-link"><span class="oi" data-glyph="magnifying-glass"></span></button>
+                  </div>       
+            </form>
     </header>
 
     <main>
-        <section>
-            <div>
-            </div>
+        <!-- Searched Artist Name and Desction Hero  -->
+        <section class="hero has-background-info my-5" id="searchArtist">
+            <div class="hero-body ">
+                <p class="title">
+                  Artist Name
+                </p>
+                <p class="subtitle">
+                  Description
+                </p>
+              </div>
         </section>
 
-        <section>
-            <div>
+        <!-- Recommendations -->
+        <section id="recommendations my-5 columns tile is-ancestor">
+            <div class="card column is-parent is-4">
+                <div class="card-image tile is-child box notification is-info box">
+                    <p class="title">Artist # 1</p>
+                    <p class="subtitle">Album/Genre</p>
+                    <figure class="image is-4by3">
+                        <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+                    </figure>
+                </div>
+                <div class="card-content">
+                  <div class="media">
+                    <div class="media-left">
+                      <figure class="image is-48x48">
+                        <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+                      </figure>
+                    </div>
+                    <div class="media-content">
+                      <p class="title is-4">Jxxx Sxxxx</p>
+                      <p class="subtitle is-6">@jxxxxsxxxx</p>
+                    </div>
+                  </div>
+              
+                  <div class="content">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Phasellus nec iaculis mauris. <a>@bulmaio</a>.
+                    <a href="#">#css</a> <a href="#">#responsive</a>
+                    <br>
+                    <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+                  </div>
+                </div>
+            </div>
+
+            <div class="card column is-parent is-4">
+                <div class="card-image tile is-child box notification is-info box">
+                    <p class="title">Artist # 1</p>
+                    <p class="subtitle">Album/Genre</p>
+                    <figure class="image is-4by3">
+                        <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+                    </figure>
+                </div>
+                <div class="card-content">
+                  <div class="media">
+                    <div class="media-left">
+                      <figure class="image is-48x48">
+                        <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+                      </figure>
+                    </div>
+                    <div class="media-content">
+                      <p class="title is-4">Jxxx Sxxxx</p>
+                      <p class="subtitle is-6">@jxxxxsxxxx</p>
+                    </div>
+                  </div>
+              
+                  <div class="content">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Phasellus nec iaculis mauris. <a>@bulmaio</a>.
+                    <a href="#">#css</a> <a href="#">#responsive</a>
+                    <br>
+                    <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+                  </div>
+                </div>
+            </div>
+
+            <div class="card column is-parent is-4">
+                <div class="card-image tile is-child box notification is-info box">
+                    <p class="title">Artist # 1</p>
+                    <p class="subtitle">Album/Genre</p>
+                    <figure class="image is-4by3">
+                        <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+                    </figure>
+                </div>
+                <div class="card-content">
+                  <div class="media">
+                    <div class="media-left">
+                      <figure class="image is-48x48">
+                        <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+                      </figure>
+                    </div>
+                    <div class="media-content">
+                      <p class="title is-4">Jxxx Sxxxx</p>
+                      <p class="subtitle is-6">@jxxxxsxxxx</p>
+                    </div>
+                  </div>
+              
+                  <div class="content">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Phasellus nec iaculis mauris. <a>@bulmaio</a>.
+                    <a href="#">#css</a> <a href="#">#responsive</a>
+                    <br>
+                    <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+                  </div>
+                </div>
+            </div>
+
+            <div class="card column is-parent is-4">
+                <div class="card-image tile is-child box notification is-info box">
+                    <p class="title">Artist # 1</p>
+                    <p class="subtitle">Album/Genre</p>
+                    <figure class="image is-4by3">
+                        <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+                    </figure>
+                </div>
+                <div class="card-content">
+                  <div class="media">
+                    <div class="media-left">
+                      <figure class="image is-48x48">
+                        <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+                      </figure>
+                    </div>
+                    <div class="media-content">
+                      <p class="title is-4">Jxxx Sxxxx</p>
+                      <p class="subtitle is-6">@jxxxxsxxxx</p>
+                    </div>
+                  </div>
+              
+                  <div class="content">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Phasellus nec iaculis mauris. <a>@bulmaio</a>.
+                    <a href="#">#css</a> <a href="#">#responsive</a>
+                    <br>
+                    <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+                  </div>
+                </div>
             </div>
         </section>
     </main>
    
 
-    <script src="./assets/js/script.js"></script>
+    <!-- <script src="./assets/js/script.js"></script> -->
 </body>
 </html>
