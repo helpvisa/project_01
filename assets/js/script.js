@@ -6,12 +6,19 @@ var apiTestString = "Pavement"; // test querying results using this string
 var keyLastFM = "3e097c528fbffe98b64806d2fe264b7b";
 var keyYoutube = "AIzaSyDtyonSH-2_xkCFFv7-WEpBHrro1tawGlI";
 
+var modeQuery = {
+    getInfo:0,
+    getSimilar:1,
+    getTopAlbums:2,
+    getTopTracks:3
+}
+
 //-----------------------
 // main body of code
 //-----------------------
 
 // test lastFM api
-queryLastFM(apiTestString, 1).then(function(data) {
+queryLastFM(apiTestString, modeQuery.getSimilar).then(function(data) {
     //console.log(data.similarartists.artist);
     sortSimilarArtists(data.similarartists.artist).then(function(artists) {
         console.log(artists);
@@ -109,7 +116,7 @@ async function sortSimilarArtists(similar) {
     for (i = 0; i < similar.length; i++) {
         var name = similar[i].name;
         // fetch artist data from name
-        var response = await queryLastFM(name, 0); // await a response (pause code until one is received)
+        var response = await queryLastFM(name, modeQuery.getInfo); // await a response (pause code until one is received)
         var artist = await response.artist; // assign the artist from the return json response
         artistArray.push(artist); // add it to the array of similar artists
     }
