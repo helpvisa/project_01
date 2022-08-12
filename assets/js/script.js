@@ -1,11 +1,11 @@
 //-----------------------
 // variable declarations
 //-----------------------
-
 var apiTestString = "Pavement"; // test querying results using this string
 var keyLastFM = "3e097c528fbffe98b64806d2fe264b7b";
 var keyYoutube = "AIzaSyDtyonSH-2_xkCFFv7-WEpBHrro1tawGlI";
 
+// mode for lastFM query
 var modeQuery = {
     getInfo:0,
     getSimilar:1,
@@ -13,29 +13,17 @@ var modeQuery = {
     getTopTracks:3
 }
 
+var numberOfRecommendations = 5; // number of artist recommendations to make after retrieving the list of artists (0-100);
+
 //-----------------------
 // main body of code
 //-----------------------
-
-// test lastFM api
-queryLastFM(apiTestString, modeQuery.getSimilar).then(function(data) {
-    //console.log(data.similarartists.artist);
-    sortSimilarArtists(data.similarartists.artist).then(function(artists) {
-        console.log(artists);
-    });
-});
-
-// test youtube API
-/*
-searchYoutube(apiTestString).then(function(data) {
-    console.log(data);
-});
-*/
+// test findArtist function
+findArtist(apiTestString);
 
 //-----------------------
 // function declarations
 //-----------------------
-
 //---api functions---//
 // fetch results from the lastfm api (artist info, similar artists, top albums and tracks)
 async function queryLastFM(artist, mode) { // returns data object
@@ -86,8 +74,9 @@ async function queryLastFM(artist, mode) { // returns data object
 async function searchYoutube(artist) { // returns data object
     // encoding the artist names to remove spaces or special character with query string safe characters
     artist = encodeURI(artist);
+    console.log(artist);
 
-    var url = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=" + artist + "&type=video&key=" + keyYoutube;
+    var url = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=" + artist + "&type=video&key=" + keyYoutube;
 
     // query the youtube API; return this promise
     return fetch(url).then(function(response) {
@@ -134,4 +123,31 @@ function compareListeners(a, b) {
     if (a.stats.listeners < b.stats.listeners)
         return -1;
     return 0;
+}
+
+//---assembly functions---//
+// function which performs the bulk of the main code executed upon entering an artist search
+function findArtist(search) {
+    queryLastFM(search, 1).then(function(data) {
+        sortSimilarArtists(data.similarartists.artist).then(function(artists) {
+            for (var i = 0; i < numberOfRecommendations; i++) {
+                var searchedArtist = artists[i].name;
+                console.log(searchedArtist + " outside loop")
+                queryLastFM(searchedArtist, 3).then(function(tracks) {
+                    console.log(searchedArtist + " inside loop");
+                    // get the top track for the current artist
+                    var topTrack = tracks.toptracks.track[0].name;
+
+                    // assemble a youtube search string of toptrack + artist name
+                    var searchString = topTrack + " " + artists[i].name + " song";
+
+                    // search youtube and get top video results
+                    searchYoutube(searchString).then(function(videos) {
+                        // print video link to console
+                        console.log("https://www.youtube.com/watch?v=" + videos.items[0].id.videoId);
+                    });
+                });
+            }
+        });
+    });
 }
