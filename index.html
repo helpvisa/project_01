@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="./assets/css/style.css">
@@ -11,7 +11,21 @@
 </head>
 <body>
     <!-- Search Bar Section -->
-    <header class="my-2 is-flex is-flex-direction-column is-align-items-center">
+    <header class="is-flex is-flex-direction-column is-align-items-center horizontal-align">
+      <h1 class="title is-size-2-mobile mt-2 mb-0">Up-N-Coming</h1>
+      <form class="column control is-4 has-icons-right">
+        <div class="field">
+          <p class="control has-icons-right">
+            <input type="text" class="input" placeholder="Artist or Band Name">
+            <span class="icon is-small is-right">
+              <i class="fas fa-search"></i>
+            </span>
+          </p>
+        </div>
+      </form>
+    </header>
+
+    <!-- <header class="has-background-grey-lighter is-flex is-flex-direction-column is-align-items-center">
       <h1 class="title is-1 mt-2 mb-0">Up-N-Coming</h1>
       <form class="column control is-4 has-icons-right">
         <div class="field">
@@ -23,10 +37,10 @@
           </p>
         </div>
       </form>
-    </header>  
+    </header>   -->
 
-    <main class="mt-0">
-        <!-- Searched Artist Name and Desction Hero  -->
+    <!-- <main class="mt-0">
+        Searched Artist Name and Desction Hero 
         <section class="hero has-background-info" id="searchArtist">
             <div class="hero-body ">
                 <p class="title">
@@ -38,7 +52,7 @@
               </div>
         </section>
 
-        <!-- Recommendations -->
+        Recommendations
         <section id="recommendations my-5 columns tile is-ancestor">
             <div class="card column is-parent is-4">
                 <div class="card-image tile is-child box notification is-info box">
@@ -164,7 +178,7 @@
                 </div>
             </div>
         </section>
-    </main>
+    </main> -->
    
 
     <!-- <script src="./assets/js/script.js"></script> -->
