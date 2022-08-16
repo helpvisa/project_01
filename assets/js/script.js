@@ -74,7 +74,6 @@ async function queryLastFM(artist, mode) { // returns data object
 async function searchYoutube(artist) { // returns data object
     // encoding the artist names to remove spaces or special character with query string safe characters
     artist = encodeURI(artist);
-    console.log(artist);
 
     var url = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=" + artist + "&type=video&key=" + keyYoutube;
 
@@ -128,26 +127,28 @@ function compareListeners(a, b) {
 //---assembly functions---//
 // function which performs the bulk of the main code executed upon entering an artist search
 function findArtist(search) {
-    queryLastFM(search, 1).then(function(data) {
-        sortSimilarArtists(data.similarartists.artist).then(function(artists) {
+    queryLastFM(search, 1).then(function (data) {
+        sortSimilarArtists(data.similarartists.artist).then(function (artists) {
+            var promiseArray = []
             for (var i = 0; i < numberOfRecommendations; i++) {
                 var searchedArtist = artists[i].name;
-                console.log(searchedArtist + " outside loop")
-                queryLastFM(searchedArtist, 3).then(function(tracks) {
-                    console.log(searchedArtist + " inside loop");
-                    // get the top track for the current artist
-                    var topTrack = tracks.toptracks.track[0].name;
+                promiseArray.push(queryLastFM(searchedArtist, 3))
+            }
+            Promise.all(promiseArray).then(function (tracks) {
+                //console.log(tracks);
+                for (var i = 0; i < tracks.length; i++) {
+                    var topTrack = tracks[i].toptracks.track[0].name
 
                     // assemble a youtube search string of toptrack + artist name
                     var searchString = topTrack + " " + artists[i].name + " song";
 
                     // search youtube and get top video results
-                    searchYoutube(searchString).then(function(videos) {
+                    searchYoutube(searchString).then(function (videos) {
                         // print video link to console
                         console.log("https://www.youtube.com/watch?v=" + videos.items[0].id.videoId);
                     });
-                });
-            }
+                }
+            });
         });
     });
 }
