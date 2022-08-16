@@ -5,26 +5,30 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic.min.css" integrity="sha512-LeCmts7kEi09nKc+DwGJqDV+dNQi/W8/qb0oUSsBLzTYiBwxj0KBlAow2//jV7jwEHwSCPShRN2+IWwWcn1x7Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic.min.css" integrity="sha512-LeCmts7kEi09nKc+DwGJqDV+dNQi/W8/qb0oUSsBLzTYiBwxj0KBlAow2//jV7jwEHwSCPShRN2+IWwWcn1x7Q==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="./assets/css/style.css">
     <title>Up-N-Coming</title>
 </head>
 <body>
     <!-- Search Bar Section -->
-    <header class="container width my-5">
-            <form class="field is-grouped columns is-gapless" id="search-form">
-                <div class="control column is-half">
-                    <input class="input" type="text" placeholder="Artist">
-                  </div>
-                  <div class="control column">
-                    <button class="button is-link"><span class="oi" data-glyph="magnifying-glass"></span></button>
-                  </div>       
-            </form>
-    </header>
+    <header class="my-2 is-flex is-flex-direction-column is-align-items-center">
+      <h1 class="title is-1 mt-2 mb-0">Up-N-Coming</h1>
+      <form class="column control is-4 has-icons-right">
+        <div class="field">
+          <p class="control has-icons-right">
+            <input type="text" class="input" placeholder="Artist or Brand Name">
+            <span class="icon is-small is-right">
+              <i class="fas fa-search"></i>
+            </span>
+          </p>
+        </div>
+      </form>
+    </header>  
 
-    <main>
+    <main class="mt-0">
         <!-- Searched Artist Name and Desction Hero  -->
-        <section class="hero has-background-info my-5" id="searchArtist">
+        <section class="hero has-background-info" id="searchArtist">
             <div class="hero-body ">
                 <p class="title">
                   Artist Name
