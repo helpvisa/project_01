@@ -192,7 +192,8 @@ function compareListeners(a, b) {
 // function which performs the bulk of the main code executed upon entering an artist search
 async function findArtist(search) {
     queryLastFM(search, 1).then(function (data) {
-        console.log(data);
+        // test output
+        // console.log(data);
         sortSimilarArtists(data.similarartists.artist).then(function (artists) {
             var promiseArray = []
             for (var i = 0; i < numberOfRecommendations; i++) {
@@ -200,7 +201,8 @@ async function findArtist(search) {
                 promiseArray.push(queryLastFM(searchedArtist, 3))
             }
             Promise.all(promiseArray).then(function (tracks) {
-                console.log(tracks);
+                // test output
+                //console.log(tracks);
                 
                 // remove the loadbar
                 loadingEl.html("");
@@ -226,6 +228,17 @@ async function findArtist(search) {
                 // append to main body
                 mainBodyEl.append(searchedArtistEl);
 
+                // add recommendations sections
+                var recEl = $("<section>");
+                recEl.addClass("has-background-grey-lighter pt-5 columns tile is-ancestor is-flex is-flex-direction-column is-align-items-center");
+                // build header
+                var recHeaderEl = $("<h2>");
+                recHeaderEl.addClass("title is-size-4-mobile");
+                recHeaderEl.text("Similar Artists");
+                // add to section, then body
+                recEl.append(recHeaderEl);
+                mainBodyEl.append(recEl);
+
                 for (var i = 0; i < tracks.length; i++) {
                     if (tracks[i].toptracks.track[0]) {
                         var topTrack = tracks[i].toptracks.track[0].name
@@ -240,7 +253,28 @@ async function findArtist(search) {
                             console.log("https://www.youtube.com/watch?v=" + videos.items[0].id.videoId);
                         });
                         */
-                       console.log("oh i found a video: " + topTrack);
+                        // test output
+                        console.log("oh i found a video: " + topTrack);
+
+                        // construct card displaying similar artist + track
+                        var cardEl = $("<div>");
+                        cardEl.addClass("card column is-parent is-full-mobile is-4-tablet mb-5");
+                        // build card body
+                        var cardBodyEl = $("<div>");
+                        cardBodyEl.addClass("card-image tile is-child box notification is-info box");
+                        // header info
+                        var titleEl = $("<p>");
+                        titleEl.addClass("title");
+                        titleEl.text(artists[i].name);
+                        // media element
+                        var mediaEl = $("<figure>");
+                        mediaEl.addClass("image is-4by3");
+                        mediaEl.html("<img src='https://bulma.io/images/placeholders/1280x960.png' alt='Placeholder image'>");
+                        // append to card
+                        cardBodyEl.append(titleEl, mediaEl);
+                        cardEl.append(cardBodyEl);
+                        // append card to section
+                        recEl.append(cardEl);
                     }
                 }
                 // reset and allow user to search again
