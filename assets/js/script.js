@@ -164,11 +164,14 @@ async function queryLastFM(artist, mode) { // returns data object
                 return data;
             });
         } else {
-            alert("No artist found.");
+            resetPage();
+            showErrorMessage("Unable to retrieve data from LastFM.");
         }
     }).catch(function(error) {
         // error fetching api data
-        alert(error + " // Could not connect to the LastFM API.");
+        //alert(error + " // Could not connect to the LastFM API.");
+        resetPage();
+        showErrorMessage("Could not connect to the LastFM API.")
     });
 }
 
