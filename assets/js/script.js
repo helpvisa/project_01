@@ -48,6 +48,7 @@ var searchFormEl = $("#search-form");
 var searchInputEl = $("#search-input");
 var headerEl = $("#landing");
 var loadingEl = $("#loading");
+var headerErrorMessageEl = $("#header-error-message");
 
 //-----------------------
 // main body of code
@@ -65,22 +66,36 @@ function onSubmit(event) {
     event.preventDefault();
 
     // prevent future searches
-    if (!isSearching) {
-        isSearching = true;
+    if (!isSearching) {                     
 
-        headerEl.removeClass("vertical-align");
-        loadingEl.html(loadBar);
-        loadingEl.addClass("center load");
+        // clear any previous error message from an invalid search query
+        headerErrorMessageEl.html("");
 
         // get inputted user value
         var search = searchInputEl.val().trim();
 
         if (search) {
+            isSearching = true;
+
+            // moves the search bar from the center of the page to the top of the page
+            headerEl.removeClass("vertical-align");
+
+            // show loading page
+            loadingEl.html(loadBar);
+            loadingEl.addClass("center load");
+
+            // start API search
             findArtist(search);
             searchInputEl.val("");
         } else {
-            // TEMP! this should not "ship"!
-            searchInputEl.value = ("Please enter an artist.");
+            
+            // If the user does not enter a value in the search box and then presses enter, then "Invalid entry" will 
+            // appear below the search box
+            var invalidEntryEl = $("<p>");
+            invalidEntryEl.addClass("has-text-danger");
+            invalidEntryEl.text("Invalid entry");
+            headerErrorMessageEl.append(invalidEntryEl);
+
         }
     }
     else {
