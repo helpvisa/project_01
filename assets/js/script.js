@@ -49,6 +49,8 @@ var searchInputEl = $("#search-input");
 var headerEl = $("#landing");
 var loadingEl = $("#loading");
 var headerErrorMessageEl = $("#header-error-message");
+var invalidEntryEl = $("<p>");
+invalidEntryEl.addClass("has-text-danger");
 
 //-----------------------
 // main body of code
@@ -74,9 +76,15 @@ function onSubmit(event) {
         // clear any previous error message from an invalid search query
         headerErrorMessageEl.html("");
 
+        // if a search is made once and then you make a blank search as the next search, the 
+        // page will go back to the landing page default
+        if(!headerEl.hasClass("vertical-align")){
+            headerEl.addClass("vertical-align");
+        }
+
         // get inputted user value
         var search = searchInputEl.val().trim();
-
+        
         if (search) {
             isSearching = true;
 
@@ -93,9 +101,7 @@ function onSubmit(event) {
         } else {
             
             // If the user does not enter a value in the search box and then presses enter, then "Invalid entry" will 
-            // appear below the search box
-            var invalidEntryEl = $("<p>");
-            invalidEntryEl.addClass("has-text-danger");
+            // appear below the search box            
             invalidEntryEl.text("Invalid entry");
             headerErrorMessageEl.append(invalidEntryEl);
 
@@ -211,7 +217,7 @@ function compareListeners(a, b) {
 async function findArtist(search) {
     queryLastFM(search, 1).then(function (data) {
         // test output
-        // console.log(data);
+         console.log(data);
         sortSimilarArtists(data.similarartists.artist).then(function (artists) {
             var promiseArray = []
             for (var i = 0; i < numberOfRecommendations; i++) {
