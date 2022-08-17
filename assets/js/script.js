@@ -233,8 +233,28 @@ function compareListeners(a, b) {
 //---assembly functions---//
 // function which performs the bulk of the main code executed upon entering an artist search
 async function findArtist(search) {
+    var artistBio;
+    // getting artist biography
+    queryLastFM(search, modeQuery.getInfo).then(function(data){
+        // if data has a message field that means the user specified aritist name does not exist
+        if(data.message){
+            resetPage();
+            showErrorMessage(data.message);
+            isSearching = false;
+        }else {
+            // removing the lastFM link ffrom the artist bio for display purposes
+            artistBio = data.artist.bio.summary.split(" <");
+            // adding a full stop at the end of the paragraph if the artist bio is not blank.
+            if(artistBio[0]){
+                artistBio[0] = artistBio[0] + ".";
+            }
+            
+        }
+    });
+
+    // getting similar artists to the artist provided by the user
     queryLastFM(search, modeQuery.getSimilar).then(function (data) {
-        // data has a message fiels that means the user specified aritist name does not exist
+        // if data has a message field that means the user specified aritist name does not exist
          if(data.message){
             // resets the page to show the landing page
             resetPage();
@@ -271,7 +291,7 @@ async function findArtist(search) {
                     // build artist description (nest another query)
                     var searchedArtistDescriptionEl = $("<p>");
                     searchedArtistDescriptionEl.addClass("subtitle");
-                    searchedArtistDescriptionEl.text("lorem ipsum lorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsum");
+                    searchedArtistDescriptionEl.text(artistBio[0]);
                     // append to section and div
                     searchedArtistDivEl.append(searchedArtistNameEl, searchedArtistDescriptionEl);
                     searchedArtistEl.append(searchedArtistDivEl);
