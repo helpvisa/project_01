@@ -63,6 +63,31 @@ searchFormEl.on("submit", onSubmit);
 //-----------------------
 // function declarations
 //-----------------------
+
+// reset page
+function resetPage(){
+    // clear anything inside the main body from the previous searches
+    mainBodyEl.html("");
+
+    // clear any previous error message from an invalid search query
+    headerErrorMessageEl.html("");
+
+    // removes the loading animation from the page
+    loadingEl.html("");
+
+    // if a search is made once and then you make a blank search as the next search, the 
+    // page will go back to the landing page default
+    if(!headerEl.hasClass("vertical-align")){
+        headerEl.addClass("vertical-align");
+    }
+}
+
+// show error message
+function showErrorMessage(message){
+    invalidEntryEl.text(message);
+    headerErrorMessageEl.append(invalidEntryEl);
+}
+
 // process page interactions
 function onSubmit(event) {
     event.preventDefault();
@@ -70,17 +95,7 @@ function onSubmit(event) {
     // prevent future searches
     if (!isSearching) {                     
 
-        // clear anything inside the main body from the previous searches
-        mainBodyEl.html("");
-
-        // clear any previous error message from an invalid search query
-        headerErrorMessageEl.html("");
-
-        // if a search is made once and then you make a blank search as the next search, the 
-        // page will go back to the landing page default
-        if(!headerEl.hasClass("vertical-align")){
-            headerEl.addClass("vertical-align");
-        }
+        resetPage();
 
         // get inputted user value
         var search = searchInputEl.val().trim();
@@ -102,8 +117,7 @@ function onSubmit(event) {
             
             // If the user does not enter a value in the search box and then presses enter, then "Invalid entry" will 
             // appear below the search box            
-            invalidEntryEl.text("Invalid entry");
-            headerErrorMessageEl.append(invalidEntryEl);
+            showErrorMessage("Invalid name");
 
         }
     }
@@ -216,21 +230,13 @@ function compareListeners(a, b) {
 // function which performs the bulk of the main code executed upon entering an artist search
 async function findArtist(search) {
     queryLastFM(search, 1).then(function (data) {
-        
+        console.log(data);
         // data has a message fiels that means the user specified aritist name does not exist
          if(data.message){
-            // if a search is made once and then you make a blank or invalid artist name search as the next search, the 
-            // page will go back to the landing page default
-            if(!headerEl.hasClass("vertical-align")){
-                headerEl.addClass("vertical-align");
-            }
-
-            // removes the loading animation from the page
-            loadingEl.html("");
+            resetPage();
 
             // shows the error message on the screen for the user to see
-            invalidEntryEl.text(data.message);
-            headerErrorMessageEl.append(invalidEntryEl);
+            showErrorMessage(data.message)
 
             isSearching = false;
          }else{
@@ -242,7 +248,7 @@ async function findArtist(search) {
                 }
                 Promise.all(promiseArray).then(function (tracks) {
                     // test output
-                    //console.log(tracks);
+                    //console.log(data.similarartists.artist);
                     
                     // remove the loadbar
                     loadingEl.html("");
