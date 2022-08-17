@@ -233,7 +233,7 @@ function compareListeners(a, b) {
 //---assembly functions---//
 // function which performs the bulk of the main code executed upon entering an artist search
 async function findArtist(search) {
-    queryLastFM(search, 1).then(function (data) {
+    queryLastFM(search, modeQuery.getSimilar).then(function (data) {
         // data has a message fiels that means the user specified aritist name does not exist
          if(data.message){
             // resets the page to show the landing page
