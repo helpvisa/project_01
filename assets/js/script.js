@@ -236,6 +236,7 @@ async function findArtist(search) {
     queryLastFM(search, 1).then(function (data) {
         // data has a message fiels that means the user specified aritist name does not exist
          if(data.message){
+            // resets the page to show the landing page
             resetPage();
 
             // shows the error message on the screen for the user to see
