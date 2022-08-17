@@ -165,13 +165,12 @@ async function queryLastFM(artist, mode) { // returns data object
             });
         } else {
             resetPage();
-            showErrorMessage("Unable to retrieve data from LastFM.");
+            showErrorMessage("Unable to retrieve data from LastFM");
         }
     }).catch(function(error) {
         // error fetching api data
-        //alert(error + " // Could not connect to the LastFM API.");
         resetPage();
-        showErrorMessage("Could not connect to the LastFM API.")
+        showErrorMessage("Could not connect to the LastFM API")
     });
 }
 
@@ -194,11 +193,13 @@ async function searchYoutube(artist) { // returns data object
                 // "https://www.youtube.com/embed/" + videoId;
             });
         } else {
-            alert("No search results found.");
+            resetPage();
+            showErrorMessage("Unable to retrieve data from YouTube API");
         }
     }).catch(function(error) {
         // error fetching api data
-        alert(error + " // Could not connect to the YouTube API.");
+        resetPage();
+        showErrorMessage("Could not connect to the YouTube API");
     });
 }
 
@@ -233,7 +234,6 @@ function compareListeners(a, b) {
 // function which performs the bulk of the main code executed upon entering an artist search
 async function findArtist(search) {
     queryLastFM(search, 1).then(function (data) {
-        console.log(data);
         // data has a message fiels that means the user specified aritist name does not exist
          if(data.message){
             resetPage();
@@ -296,14 +296,14 @@ async function findArtist(search) {
                             var searchString = topTrack + " " + artists[i].name + " song";
     
                             // search youtube and get top video results
-                            /*
-                            searchYoutube(searchString).then(function (videos) {
-                                // print video link to console
-                                console.log("https://www.youtube.com/watch?v=" + videos.items[0].id.videoId);
-                            });
-                            */
+                            
+                            // searchYoutube(searchString).then(function (videos) {
+                            //     // print video link to console
+                            //     console.log("https://www.youtube.com/watch?v=" + videos.items[0].id.videoId);
+                            // });
+                            
                             // test output
-                            console.log("oh i found a video: " + topTrack);
+                            // console.log("oh i found a video: " + topTrack);
     
                             // construct card displaying similar artist + track
                             var cardEl = $("<div>");
