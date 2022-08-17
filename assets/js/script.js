@@ -246,7 +246,6 @@ async function findArtist(search) {
             var bioData = data.artist.bio.summary.split(" <");
             // adding a full stop at the end of the paragraph if the artist bio is not blank.
             artistBio = bioData[0];
-            console.log(artistBio[70]);
             if(artistBio){
                 if(artistBio[artistBio.length - 1] === "."){
                     console.log("here");
