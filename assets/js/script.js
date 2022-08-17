@@ -236,13 +236,13 @@ async function findArtist(search) {
     var artistBio;
     // getting artist biography
     queryLastFM(search, modeQuery.getInfo).then(function(data){
-        // if data has a message field that means the user specified aritist name does not exist
+        // if data has a message field that means the user specified artist name does not exist
         if(data.message){
             resetPage();
             showErrorMessage(data.message);
             isSearching = false;
-        }else {
-            // removing the lastFM link ffrom the artist bio for display purposes
+        } else {
+            // removing the lastFM link from the artist bio for display purposes
             var bioData = data.artist.bio.summary.split(" <");
             // adding a full stop at the end of the paragraph if the artist bio is not blank.
             artistBio = bioData[0];
@@ -320,7 +320,9 @@ async function findArtist(search) {
                         // add to section, then body
                         recEl.append(recHeaderEl);
                         mainBodyEl.append(recEl);
-        
+                        
+                        var youtubePromiseArray = [] // store promises to call and wait for
+                        var youtubeArtistNames = [] // store artist names to re-display in promises
                         for (var i = 0; i < tracks.length; i++) {
                             if (tracks[i].toptracks.track[0]) {
                                 var topTrack = tracks[i].toptracks.track[0].name
@@ -329,15 +331,17 @@ async function findArtist(search) {
                                 var searchString = topTrack + " " + artists[i].name + " song";
         
                                 // search youtube and get top video results
-                                
-                                // searchYoutube(searchString).then(function (videos) {
-                                //     // print video link to console
-                                //     console.log("https://www.youtube.com/watch?v=" + videos.items[0].id.videoId);
-                                // });
-                                
-                                // test output
-                                // console.log("oh i found a video: " + topTrack);
-        
+                                youtubeArtistNames.push(artists[i].name);
+                                youtubePromiseArray.push(searchYoutube(searchString));
+                            }
+                        }
+
+                        // check and wait for promises
+                        Promise.all(youtubePromiseArray).then(function (videos) {
+                            for (var v = 0; v < videos.length; v++) { // v for video...
+                                // save video link to var
+                                var videoUrl = "https://www.youtube.com/embed/" + videos[v].items[0].id.videoId;
+
                                 // construct card displaying similar artist + track
                                 var cardEl = $("<div>");
                                 cardEl.addClass("card column is-parent is-full-mobile is-4-tablet mb-5");
@@ -347,25 +351,25 @@ async function findArtist(search) {
                                 // header info
                                 var titleEl = $("<p>");
                                 titleEl.addClass("title");
-                                titleEl.text(artists[i].name);
+                                titleEl.text(youtubeArtistNames[v]);
                                 // media element
-                                var mediaEl = $("<figure>");
-                                mediaEl.addClass("image is-4by3");
-                                mediaEl.html("<img src='https://bulma.io/images/placeholders/1280x960.png' alt='Placeholder image'>");
+                                var mediaEl = $("<iframe>");
+                                mediaEl.addClass("video");
+                                mediaEl.attr("src", videoUrl);
                                 // append to card
                                 cardBodyEl.append(titleEl, mediaEl);
                                 cardEl.append(cardBodyEl);
                                 // append card to section
                                 recEl.append(cardEl);
                             }
-                        }
+                        });
+                        // test output
+                        // console.log("oh i found a video: " + topTrack);
                         // reset and allow user to search again
                         isSearching = false;
                     });
                 }
-                
             });
          }
-        
     });
 }
