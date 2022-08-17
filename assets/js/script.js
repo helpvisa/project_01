@@ -68,6 +68,9 @@ function onSubmit(event) {
     // prevent future searches
     if (!isSearching) {                     
 
+        // clear anything inside the main body from the previous searches
+        mainBodyEl.html("");
+
         // clear any previous error message from an invalid search query
         headerErrorMessageEl.html("");
 
@@ -221,7 +224,7 @@ async function findArtist(search) {
                 
                 // remove the loadbar
                 loadingEl.html("");
-                loadingEl.removeClass("center load");
+                loadingEl.removeClass("center load");                
 
                 // add searched artist info section
                 var searchedArtistEl = $("<section>");
