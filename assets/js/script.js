@@ -4,6 +4,30 @@
 var apiTestString = "Pavement"; // test querying results using this string
 var keyLastFM = "3e097c528fbffe98b64806d2fe264b7b";
 var keyYoutube = "AIzaSyDtyonSH-2_xkCFFv7-WEpBHrro1tawGlI";
+var isSearching = false // check if the user is searching for a track and prevent new searches
+
+// header styles
+var headerPreSearch = "hero is-flex is-flex-direction-column is-align-items-center horizontal-align"
+var headerPostSearch = "has-background-grey-lighter is-flex is-flex-direction-column is-align-items-center"
+var loadBar = `<div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>`
+
+var searchedArtistHTML = `<div class="hero-body is-flex is-flex-direction-column is-align-items-center">
+                           <p class="title is-size-3-mobile">
+                                <!-- Artist Name -->
+                            </p>
+                            <p class="subtitle">
+                                <!-- Description -->
+                            </p>
+                        </div>`
 
 // mode for lastFM query
 var modeQuery = {
@@ -16,14 +40,54 @@ var modeQuery = {
 var numberOfRecommendations = 5; // number of artist recommendations to make after retrieving the list of artists (0-100);
 
 //-----------------------
+// acquire / query page elements
+//-----------------------
+
+var mainBodyEl = $("#main-body");
+var searchFormEl = $("#search-form");
+var searchInputEl = $("#search-input");
+var headerEl = $("#landing");
+var loadingEl = $("#loading");
+
+//-----------------------
 // main body of code
 //-----------------------
 // test findArtist function
-findArtist(apiTestString);
+//findArtist(apiTestString);
+
+searchFormEl.on("submit", onSubmit);
 
 //-----------------------
 // function declarations
 //-----------------------
+// process page interactions
+function onSubmit(event) {
+    event.preventDefault();
+
+    // prevent future searches
+    if (!isSearching) {
+        isSearching = true;
+
+        headerEl.removeClass("vertical-align");
+        loadingEl.html(loadBar);
+        loadingEl.addClass("center load");
+
+        // get inputted user value
+        var search = searchInputEl.val().trim();
+
+        if (search) {
+            findArtist(search);
+            searchInputEl.val("");
+        } else {
+            // TEMP! this should not "ship"!
+            searchInputEl.value = ("Please enter an artist.");
+        }
+    }
+    else {
+        console.log("searching already!");
+    }
+}
+
 //---api functions---//
 // fetch results from the lastfm api (artist info, similar artists, top albums and tracks)
 async function queryLastFM(artist, mode) { // returns data object
@@ -126,8 +190,9 @@ function compareListeners(a, b) {
 
 //---assembly functions---//
 // function which performs the bulk of the main code executed upon entering an artist search
-function findArtist(search) {
+async function findArtist(search) {
     queryLastFM(search, 1).then(function (data) {
+        console.log(data);
         sortSimilarArtists(data.similarartists.artist).then(function (artists) {
             var promiseArray = []
             for (var i = 0; i < numberOfRecommendations; i++) {
@@ -135,19 +200,51 @@ function findArtist(search) {
                 promiseArray.push(queryLastFM(searchedArtist, 3))
             }
             Promise.all(promiseArray).then(function (tracks) {
-                //console.log(tracks);
+                console.log(tracks);
+                
+                // remove the loadbar
+                loadingEl.html("");
+                loadingEl.removeClass("center load");
+
+                // add searched artist info section
+                var searchedArtistEl = $("<section>");
+                searchedArtistEl.addClass("hero has-background-info");
+                // build container div
+                var searchedArtistDivEl = $("<div>");
+                searchedArtistDivEl.addClass("hero-body is-flex is-flex-direction-column is-align-items-center");
+                // build artist name
+                var searchedArtistNameEl = $("<p>");
+                searchedArtistNameEl.addClass("title is-size-3-mobile");
+                searchedArtistNameEl.text(data.similarartists["@attr"].artist);
+                // build artist description (nest another query)
+                var searchedArtistDescriptionEl = $("<p>");
+                searchedArtistDescriptionEl.addClass("subtitle");
+                searchedArtistDescriptionEl.text("lorem ipsum lorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsum");
+                // append to section and div
+                searchedArtistDivEl.append(searchedArtistNameEl, searchedArtistDescriptionEl);
+                searchedArtistEl.append(searchedArtistDivEl);
+                // append to main body
+                mainBodyEl.append(searchedArtistEl);
+
                 for (var i = 0; i < tracks.length; i++) {
-                    var topTrack = tracks[i].toptracks.track[0].name
+                    if (tracks[i].toptracks.track[0]) {
+                        var topTrack = tracks[i].toptracks.track[0].name
 
-                    // assemble a youtube search string of toptrack + artist name
-                    var searchString = topTrack + " " + artists[i].name + " song";
+                        // assemble a youtube search string of toptrack + artist name
+                        var searchString = topTrack + " " + artists[i].name + " song";
 
-                    // search youtube and get top video results
-                    searchYoutube(searchString).then(function (videos) {
-                        // print video link to console
-                        console.log("https://www.youtube.com/watch?v=" + videos.items[0].id.videoId);
-                    });
+                        // search youtube and get top video results
+                        /*
+                        searchYoutube(searchString).then(function (videos) {
+                            // print video link to console
+                            console.log("https://www.youtube.com/watch?v=" + videos.items[0].id.videoId);
+                        });
+                        */
+                       console.log("oh i found a video: " + topTrack);
+                    }
                 }
+                // reset and allow user to search again
+                isSearching = false;
             });
         });
     });
