@@ -4,6 +4,30 @@
 var apiTestString = "Pavement"; // test querying results using this string
 var keyLastFM = "3e097c528fbffe98b64806d2fe264b7b";
 var keyYoutube = "AIzaSyDtyonSH-2_xkCFFv7-WEpBHrro1tawGlI";
+var isSearching = false // check if the user is searching for a track and prevent new searches
+
+// header styles
+var headerPreSearch = "hero is-flex is-flex-direction-column is-align-items-center horizontal-align"
+var headerPostSearch = "has-background-grey-lighter is-flex is-flex-direction-column is-align-items-center"
+var loadBar = `<div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>`
+
+var searchedArtistHTML = `<div class="hero-body is-flex is-flex-direction-column is-align-items-center">
+                           <p class="title is-size-3-mobile">
+                                <!-- Artist Name -->
+                            </p>
+                            <p class="subtitle">
+                                <!-- Description -->
+                            </p>
+                        </div>`
 
 // mode for lastFM query
 var modeQuery = {
@@ -16,14 +40,92 @@ var modeQuery = {
 var numberOfRecommendations = 5; // number of artist recommendations to make after retrieving the list of artists (0-100);
 
 //-----------------------
+// acquire / query page elements
+//-----------------------
+
+var mainBodyEl = $("#main-body");
+var searchFormEl = $("#search-form");
+var searchInputEl = $("#search-input");
+var headerEl = $("#landing");
+var loadingEl = $("#loading");
+var headerErrorMessageEl = $("#header-error-message");
+var invalidEntryEl = $("<p>");
+invalidEntryEl.addClass("has-text-danger");
+
+//-----------------------
 // main body of code
 //-----------------------
 // test findArtist function
-findArtist(apiTestString);
+//findArtist(apiTestString);
+
+searchFormEl.on("submit", onSubmit);
 
 //-----------------------
 // function declarations
 //-----------------------
+
+// reset page
+function resetPage(){
+    // clear anything inside the main body from the previous searches
+    mainBodyEl.html("");
+
+    // clear any previous error message from an invalid search query
+    headerErrorMessageEl.html("");
+
+    // removes the loading animation from the page
+    loadingEl.html("");
+
+    // if a search is made once and then you make a blank search as the next search, the 
+    // page will go back to the landing page default
+    if(!headerEl.hasClass("vertical-align")){
+        headerEl.addClass("vertical-align");
+    }
+}
+
+// show error message
+function showErrorMessage(message){
+    invalidEntryEl.text(message);
+    headerErrorMessageEl.append(invalidEntryEl);
+}
+
+// process page interactions
+function onSubmit(event) {
+    event.preventDefault();
+
+    // prevent future searches
+    if (!isSearching) {                     
+
+        resetPage();
+
+        // get inputted user value
+        var search = searchInputEl.val().trim();
+        
+        if (search) {
+            isSearching = true;
+
+            // moves the search bar from the center of the page to the top of the page
+            headerEl.removeClass("vertical-align");
+
+            // show loading page
+            loadingEl.html(loadBar);
+            loadingEl.addClass("center load");
+
+            // start API search
+            findArtist(search);
+            searchInputEl.val("");
+        } else {
+            
+            // If the user does not enter a value in the search box and then presses enter, then "Invalid entry" will 
+            // appear below the search box            
+            showErrorMessage("Invalid name");
+
+        }
+    }
+    else {
+        console.log("searching already!");
+    }
+}
+
 //---api functions---//
 // fetch results from the lastfm api (artist info, similar artists, top albums and tracks)
 async function queryLastFM(artist, mode) { // returns data object
@@ -62,11 +164,13 @@ async function queryLastFM(artist, mode) { // returns data object
                 return data;
             });
         } else {
-            alert("No artist found.");
+            resetPage();
+            showErrorMessage("Unable to retrieve data from LastFM");
         }
     }).catch(function(error) {
         // error fetching api data
-        alert(error + " // Could not connect to the LastFM API.");
+        resetPage();
+        showErrorMessage("Could not connect to the LastFM API")
     });
 }
 
@@ -89,11 +193,13 @@ async function searchYoutube(artist) { // returns data object
                 // "https://www.youtube.com/embed/" + videoId;
             });
         } else {
-            alert("No search results found.");
+            resetPage();
+            showErrorMessage("Unable to retrieve data from YouTube API");
         }
     }).catch(function(error) {
         // error fetching api data
-        alert(error + " // Could not connect to the YouTube API.");
+        resetPage();
+        showErrorMessage("Could not connect to the YouTube API");
     });
 }
 
@@ -126,29 +232,144 @@ function compareListeners(a, b) {
 
 //---assembly functions---//
 // function which performs the bulk of the main code executed upon entering an artist search
-function findArtist(search) {
-    queryLastFM(search, 1).then(function (data) {
-        sortSimilarArtists(data.similarartists.artist).then(function (artists) {
-            var promiseArray = []
-            for (var i = 0; i < numberOfRecommendations; i++) {
-                var searchedArtist = artists[i].name;
-                promiseArray.push(queryLastFM(searchedArtist, 3))
-            }
-            Promise.all(promiseArray).then(function (tracks) {
-                //console.log(tracks);
-                for (var i = 0; i < tracks.length; i++) {
-                    var topTrack = tracks[i].toptracks.track[0].name
+async function findArtist(search) {
+    var artistBio;
+    // getting artist biography
+    queryLastFM(search, modeQuery.getInfo).then(function(data){
+        // if data has a message field that means the user specified artist name does not exist
+        if(data.message){
+            resetPage();
+            showErrorMessage(data.message);
+            isSearching = false;
+        } else {
+            // removing the lastFM link from the artist bio for display purposes
+            var bioData = data.artist.bio.summary.split(" <");
+            // adding a full stop at the end of the paragraph if the artist bio is not blank.
+            artistBio = bioData[0];
+            if(artistBio){
+                if(artistBio[artistBio.length - 1] === "."){
+                    console.log("here");
+                }else {
+                    artistBio = artistBio + ".";
+                }
+            }            
+        }
+    });
 
-                    // assemble a youtube search string of toptrack + artist name
-                    var searchString = topTrack + " " + artists[i].name + " song";
+    // getting similar artists to the artist provided by the user
+    queryLastFM(search, modeQuery.getSimilar).then(function (data) {
+        // if data has a message field that means the user specified aritist name does not exist
+         if(data.message){
+            // resets the page to show the landing page
+            resetPage();
 
-                    // search youtube and get top video results
-                    searchYoutube(searchString).then(function (videos) {
-                        // print video link to console
-                        console.log("https://www.youtube.com/watch?v=" + videos.items[0].id.videoId);
+            // shows the error message on the screen for the user to see
+            showErrorMessage(data.message)
+
+            isSearching = false;
+         }else{
+            sortSimilarArtists(data.similarartists.artist).then(function (artists) {
+                var promiseArray = []
+                // if the artist name searched by the user it incorrect the API returns a response of length 0.
+                // it is being cheked here.
+                if(artists.length === 0){
+                    resetPage();
+                    showErrorMessage("Invalid name");
+                    isSearching = false;
+                } else {
+                    for (var i = 0; i < numberOfRecommendations; i++) {
+                    
+                        var searchedArtist = artists[i].name;
+                        promiseArray.push(queryLastFM(searchedArtist, 3))
+                    }
+                    Promise.all(promiseArray).then(function (tracks) {
+                        // test output
+                        //console.log(data.similarartists.artist);
+                        
+                        // remove the loadbar
+                        loadingEl.html("");
+                        loadingEl.removeClass("center load");                
+        
+                        // add searched artist info section
+                        var searchedArtistEl = $("<section>");
+                        searchedArtistEl.addClass("hero has-background-info");
+                        // build container div
+                        var searchedArtistDivEl = $("<div>");
+                        searchedArtistDivEl.addClass("hero-body is-flex is-flex-direction-column is-align-items-center");
+                        // build artist name
+                        var searchedArtistNameEl = $("<p>");
+                        searchedArtistNameEl.addClass("title is-size-3-mobile");
+                        searchedArtistNameEl.text(data.similarartists["@attr"].artist);
+                        // build artist description (nest another query)
+                        var searchedArtistDescriptionEl = $("<p>");
+                        searchedArtistDescriptionEl.addClass("subtitle");
+                        searchedArtistDescriptionEl.text(artistBio);
+                        // append to section and div
+                        searchedArtistDivEl.append(searchedArtistNameEl, searchedArtistDescriptionEl);
+                        searchedArtistEl.append(searchedArtistDivEl);
+                        // append to main body
+                        mainBodyEl.append(searchedArtistEl);
+        
+                        // add recommendations sections
+                        var recEl = $("<section>");
+                        recEl.addClass("has-background-grey-lighter pt-5 columns tile is-ancestor is-flex is-flex-direction-column is-align-items-center");
+                        // build header
+                        var recHeaderEl = $("<h2>");
+                        recHeaderEl.addClass("title is-size-4-mobile");
+                        recHeaderEl.text("Similar Artists");
+                        // add to section, then body
+                        recEl.append(recHeaderEl);
+                        mainBodyEl.append(recEl);
+                        
+                        var youtubePromiseArray = [] // store promises to call and wait for
+                        var youtubeArtistNames = [] // store artist names to re-display in promises
+                        for (var i = 0; i < tracks.length; i++) {
+                            if (tracks[i].toptracks.track[0]) {
+                                var topTrack = tracks[i].toptracks.track[0].name
+        
+                                // assemble a youtube search string of toptrack + artist name
+                                var searchString = topTrack + " " + artists[i].name + " song";
+        
+                                // search youtube and get top video results
+                                youtubeArtistNames.push(artists[i].name);
+                                youtubePromiseArray.push(searchYoutube(searchString));
+                            }
+                        }
+
+                        // check and wait for promises
+                        Promise.all(youtubePromiseArray).then(function (videos) {
+                            for (var v = 0; v < videos.length; v++) { // v for video...
+                                // save video link to var
+                                var videoUrl = "https://www.youtube.com/embed/" + videos[v].items[0].id.videoId;
+
+                                // construct card displaying similar artist + track
+                                var cardEl = $("<div>");
+                                cardEl.addClass("card column is-parent is-full-mobile is-4-tablet mb-5");
+                                // build card body
+                                var cardBodyEl = $("<div>");
+                                cardBodyEl.addClass("card-image tile is-child box notification is-info box");
+                                // header info
+                                var titleEl = $("<p>");
+                                titleEl.addClass("title");
+                                titleEl.text(youtubeArtistNames[v]);
+                                // media element
+                                var mediaEl = $("<iframe>");
+                                mediaEl.addClass("video");
+                                mediaEl.attr("src", videoUrl);
+                                // append to card
+                                cardBodyEl.append(titleEl, mediaEl);
+                                cardEl.append(cardBodyEl);
+                                // append card to section
+                                recEl.append(cardEl);
+                            }
+                        });
+                        // test output
+                        // console.log("oh i found a video: " + topTrack);
+                        // reset and allow user to search again
+                        isSearching = false;
                     });
                 }
             });
-        });
+         }
     });
 }
