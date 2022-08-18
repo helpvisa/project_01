@@ -20,14 +20,14 @@ var loadBar = `<div class="wave"></div>
                 <div class="wave"></div>
                 <div class="wave"></div>`
 
-var searchedArtistHTML = `<div class="hero-body is-flex is-flex-direction-column is-align-items-center">
-                           <p class="title is-size-3-mobile">
-                                <!-- Artist Name -->
-                            </p>
-                            <p class="subtitle">
-                                <!-- Description -->
-                            </p>
-                        </div>`
+// var searchedArtistHTML = `<div class="hero-body is-flex is-flex-direction-column is-align-items-center">
+//                            <p class="title is-size-3-mobile">
+//                                 <!-- Artist Name -->
+//                             </p>
+//                             <p class="subtitle">
+//                                 <!-- Description -->
+//                             </p>
+//                         </div>`
 
 // mode for lastFM query
 var modeQuery = {
