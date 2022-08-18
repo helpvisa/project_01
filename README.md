@@ -21,6 +21,9 @@ The following image shows the landing page of the application.
 The following image shows the search result after the user enters an artist or band name.
 ![Artist search](./assets/images/artist-search.png)
 
+The following image the past recomendations stored in the browsers local storage.
+![Past recomendations](./assets/images/past-recomendations.png)
+
 The following image shows the error message that the application displays when the user searches without entering a name
 ![Blank name error handling](./assets/images/blank-name-error.png)
 
