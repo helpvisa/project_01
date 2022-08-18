@@ -40,6 +40,6 @@ The team working on this project:
 * Innocent Ngoy 
 
 ## Deployed Site
-The deployed site of the applcation can be accessed by clicking [here](https://helpvisa.github.io/up_n_coming/).
+The deployed site of the applcation can be accessed by clicking [here](https://helpvisa.github.io/undercurrents/).
 
 ---
