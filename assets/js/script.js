@@ -3,12 +3,23 @@
 //-----------------------
 var apiTestString = "Pavement"; // test querying results using this string
 var keyLastFM = "3e097c528fbffe98b64806d2fe264b7b";
-var keyYoutube = "AIzaSyDtyonSH-2_xkCFFv7-WEpBHrro1tawGlI";
+//var keyYoutube = "AIzaSyDtyonSH-2_xkCFFv7-WEpBHrro1tawGlI";
+var keyYoutube = "AIzaSyA9-KFhMmKhxoZhQuSZ_xF5eLbbeVv0mYM";
 var isSearching = false // check if the user is searching for a track and prevent new searches
+
+// for localStorage
+var searchHistorySize = 10; // number of past suggested artists to store
+var pastSearches = JSON.parse(localStorage.getItem("suggestion-history"));
+var tempSearches = []; // temp array for storing next search
+// check if no savedata exists and create an empty array if it does not
+if (!pastSearches) {
+    pastSearches = []
+}
 
 // header styles
 var headerPreSearch = "hero is-flex is-flex-direction-column is-align-items-center horizontal-align"
 var headerPostSearch = "has-background-grey-lighter is-flex is-flex-direction-column is-align-items-center"
+// loading bar
 var loadBar = `<div class="wave"></div>
                 <div class="wave"></div>
                 <div class="wave"></div>
@@ -20,14 +31,14 @@ var loadBar = `<div class="wave"></div>
                 <div class="wave"></div>
                 <div class="wave"></div>`
 
-var searchedArtistHTML = `<div class="hero-body is-flex is-flex-direction-column is-align-items-center">
-                           <p class="title is-size-3-mobile">
-                                <!-- Artist Name -->
-                            </p>
-                            <p class="subtitle">
-                                <!-- Description -->
-                            </p>
-                        </div>`
+// var searchedArtistHTML = `<div class="hero-body is-flex is-flex-direction-column is-align-items-center">
+//                            <p class="title is-size-3-mobile">
+//                                 <!-- Artist Name -->
+//                             </p>
+//                             <p class="subtitle">
+//                                 <!-- Description -->
+//                             </p>
+//                         </div>`
 
 // mode for lastFM query
 var modeQuery = {
@@ -49,15 +60,16 @@ var searchInputEl = $("#search-input");
 var headerEl = $("#landing");
 var loadingEl = $("#loading");
 var headerErrorMessageEl = $("#header-error-message");
+var historyEl = $("#history");
+// create invalid entry element
 var invalidEntryEl = $("<p>");
 invalidEntryEl.addClass("has-text-danger");
 
 //-----------------------
-// main body of code
+// on page load
 //-----------------------
-// test findArtist function
-//findArtist(apiTestString);
 
+drawHistory(); // draw past search results to screen, if they exist
 searchFormEl.on("submit", onSubmit);
 
 //-----------------------
@@ -289,7 +301,7 @@ async function findArtist(search) {
                         // remove the loadbar
                         loadingEl.html("");
                         loadingEl.removeClass("center load");                
-        
+
                         // add searched artist info section
                         var searchedArtistEl = $("<section>");
                         searchedArtistEl.addClass("hero has-background-info");
@@ -302,7 +314,7 @@ async function findArtist(search) {
                         searchedArtistNameEl.text(data.similarartists["@attr"].artist);
                         // build artist description (nest another query)
                         var searchedArtistDescriptionEl = $("<p>");
-                        searchedArtistDescriptionEl.addClass("subtitle");
+                        searchedArtistDescriptionEl.addClass("subtitle px-3");
                         searchedArtistDescriptionEl.text(artistBio);
                         // append to section and div
                         searchedArtistDivEl.append(searchedArtistNameEl, searchedArtistDescriptionEl);
@@ -339,8 +351,21 @@ async function findArtist(search) {
                         // check and wait for promises
                         Promise.all(youtubePromiseArray).then(function (videos) {
                             for (var v = 0; v < videos.length; v++) { // v for video...
-                                // save video link to var
+                                // save video embed url to var
                                 var videoUrl = "https://www.youtube.com/embed/" + videos[v].items[0].id.videoId;
+
+                                // save a LINK to the actual video page, put it in localStorage, and console.log the localStorage array
+                                var videoLink = "https://www.youtube.com/watch?v=" + videos[v].items[0].id.videoId;
+                                // save into object in search history
+                                tempSearches.push({
+                                    artistName: youtubeArtistNames[v],
+                                    link: videoLink,
+                                });
+
+                                // remove first element if pastSearches is greater than determined desired size
+                                if (pastSearches.length > searchHistorySize) {
+                                    pastSearches.shift();
+                                }
 
                                 // construct card displaying similar artist + track
                                 var cardEl = $("<div>");
@@ -362,14 +387,67 @@ async function findArtist(search) {
                                 // append card to section
                                 recEl.append(cardEl);
                             }
+                            // no longer searching
+                            isSearching = false;
+                            
+                            // draw past searches to the screen
+                            drawHistory();
+
+                            // update searches to be saved
+                            for (var i = 0; i < tempSearches.length; i++) {
+                                // add to saved array
+                                pastSearches.push(tempSearches[i]);
+
+                                // pop off if there are too many!
+                                if (pastSearches.length > searchHistorySize) {
+                                    pastSearches.shift();
+                                }
+                            }
+                            // now save; old search history is drawn to screen but updated in time for next search
+                            localStorage.setItem("suggestion-history", JSON.stringify(pastSearches));
+
+                            // now reset tempSearches array
+                            tempSearches = [];
                         });
-                        // test output
-                        // console.log("oh i found a video: " + topTrack);
-                        // reset and allow user to search again
-                        isSearching = false;
                     });
                 }
             });
          }
     });
+}
+
+// display past search history
+function drawHistory() {
+    // create container
+    var historyEl = $("<section>");
+    historyEl.addClass("has-background-dark pt-5 columns tile is-ancestor is-flex is-flex-direction-column is-align-items-center");
+    historyEl.attr("id", "history");
+    // add title
+    var historyTitleEl = $("<h2>");
+    historyTitleEl.addClass("has-text-light title is-size-4-mobile");
+    historyTitleEl.text("Previous Recommendations");
+    historyEl.append(historyTitleEl);
+
+    // construct recommendations
+    for (var i = pastSearches.length - 1; i > -1; i--) {
+        // construct card displaying similar artist + track
+        var cardEl = $("<div>");
+        cardEl.addClass("card column has-background-grey is-parent is-full-mobile is-4-tablet mb-5");
+        // build card body
+        var cardBodyEl = $("<div>");
+        cardBodyEl.addClass("has-background-white-ter card-image tile is-child box notification is-info box has-text-centered");
+        // header info
+        var titleEl = $("<a>");
+        titleEl.addClass("has-text-dark title");
+        titleEl.text(pastSearches[i].artistName);
+        titleEl.attr("href", pastSearches[i].link);
+        titleEl.attr("target", "_blank");
+        // append
+        cardBodyEl.append(titleEl);
+        cardEl.append(cardBodyEl);
+        // append card to section
+        historyEl.append(cardEl);
+    }
+
+    mainBodyEl.append(historyEl);
 }

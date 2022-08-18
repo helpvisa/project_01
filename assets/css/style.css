@@ -30,6 +30,11 @@
     aspect-ratio: 4/3;
 }
 
+/* helper; disables underlining on links */
+.no-underline {
+    text-decoration: none;
+}
+
 .wave {
     width: 5px;
     height: 100px;
