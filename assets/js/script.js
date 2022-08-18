@@ -3,8 +3,8 @@
 //-----------------------
 var apiTestString = "Pavement"; // test querying results using this string
 var keyLastFM = "3e097c528fbffe98b64806d2fe264b7b";
-//var keyYoutube = "AIzaSyDtyonSH-2_xkCFFv7-WEpBHrro1tawGlI";
-var keyYoutube = "AIzaSyA9-KFhMmKhxoZhQuSZ_xF5eLbbeVv0mYM";
+var keyYoutube = "AIzaSyDtyonSH-2_xkCFFv7-WEpBHrro1tawGlI";
+//var keyYoutube = "AIzaSyA9-KFhMmKhxoZhQuSZ_xF5eLbbeVv0mYM";
 var isSearching = false // check if the user is searching for a track and prevent new searches
 
 // for localStorage
