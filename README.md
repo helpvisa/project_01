@@ -15,10 +15,17 @@ HTML
 Jquery
 
 ## Screenshots
+The following image shows the landing page of the application.
+![Landing page](./assets/images/landing-page.png)
 
-https://helpvisa/up_n_coming/assets/images/screenshot.PNG
+The following image shows the search result after the user enters an artist or band name.
+![Artist search](./assets/images/artist-search.png)
 
-![Preview](./assets/images/screenshot.PNG)
+The following image shows the error message that the application displays when the user searches without entering a name
+![Blank name error handling](./assets/images/blank-name-error.png)
+
+The following image shows the error message that the application displays when the artist name is not found in the database
+![Unknown artist name error handling](./assets/images/unknown-artist-name.png)
 
 
 ## Roadmap
