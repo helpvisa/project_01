@@ -38,3 +38,8 @@ The team working on this project:
 * Mustapha Taylor
 * Jerwin Sauco
 * Innocent Ngoy 
+
+## Deployed Site
+The deployed site of the applcation can be accessed by clicking [here](https://helpvisa.github.io/up_n_coming/).
+
+---
