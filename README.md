@@ -5,6 +5,12 @@ Up N' Coming Music Finder
 # Description
 Find artists similar to the ones you already love and give them a listen and a helping hand. We're currently utilizing the Last.fm and YouTube API to deliver artists of a similar genre. We decided to choose Bulma and Skeleton framework. 
 
+# Technologies Used
+Bulma and Skeleton
+Javascript
+HTML
+Jquery
+
 # Screenshots
 
 https://helpvisa/up_n_coming/assets/images/screenshot.PNG
