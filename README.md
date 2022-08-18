@@ -31,10 +31,10 @@ The following image shows the error message that the application displays when t
 ## Roadmap
 We're considering adding to the MVP at a later date.
 
-## Contributing 
+## Team Members
 The team working on this project:  
-Daniel Brackenbury
-Shantanu Mazumder
-Mustapha Taylor
-Jerwin Sauco
-Innocent Ngoy 
+* Daniel Brackenbury
+* Shantanu Mazumder
+* Mustapha Taylor
+* Jerwin Sauco
+* Innocent Ngoy 
