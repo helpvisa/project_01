@@ -45,4 +45,7 @@ The team working on this project:
 ## Deployed Site
 The deployed site of the applcation can be accessed by clicking [here](https://helpvisa.github.io/undercurrents/).
 
+## Credits
+The loading animation was acquired from hub.blogspot.com from an article by Clint Fontanella. It was modified for our application. The original article and the source code can be accessed by clicking [here](https://blog.hubspot.com/website/css-loading-animation).
+
 ---
