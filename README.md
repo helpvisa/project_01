@@ -13,6 +13,8 @@ Find artists similar to the ones you already love and give them a listen and a h
 * Javascript
 * HTML
 * jQuery
+* LastFM API
+* YouTube API
 
 ## Screenshots
 The following image shows the landing page of the application.
