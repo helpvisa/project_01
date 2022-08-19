@@ -9,7 +9,8 @@ Find artists similar to the ones you already love and give them a listen and a h
 * When there is an error connecting to the YouTube API.
 
 ## Technologies Used
-* Bulma
+* Bulma CSS framework
+* CSS
 * Javascript
 * HTML
 * jQuery
