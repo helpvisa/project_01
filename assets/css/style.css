@@ -12,15 +12,6 @@
     min-height: 100%;
 }
 
-/* From https://blog.hubspot.com/website/css-loading-animation */
-.center {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: white;
-}
-
 .load {
     height: 80vh;
 }
@@ -34,6 +25,16 @@
 .no-underline {
     text-decoration: none;
 }
+
+/* From https://blog.hubspot.com/website/css-loading-animation  start*/
+.center {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+}
+
 
 .wave {
     width: 5px;
@@ -93,3 +94,4 @@
         transform: scale(0);
     }
 }
+/* From https://blog.hubspot.com/website/css-loading-animation  end*/
