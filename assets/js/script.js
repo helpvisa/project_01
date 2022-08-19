@@ -134,7 +134,7 @@ function onSubmit(event) {
         }
     }
     else {
-        console.log("searching already!");
+        //console.log("searching already!");
     }
 }
 
@@ -260,7 +260,7 @@ async function findArtist(search) {
             artistBio = bioData[0];
             if(artistBio){
                 if(artistBio[artistBio.length - 1] === "."){
-                    console.log("here");
+                    //console.log("here");
                 }else {
                     artistBio = artistBio + ".";
                 }
