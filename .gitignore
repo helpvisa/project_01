@@ -13,3 +13,6 @@
 
 # swp files
 *.swp
+
+# ignore testing files
+testing/

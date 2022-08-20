@@ -1,4 +1,104 @@
+<<<<<<< HEAD
 {
    margin: 0;
    padding: 0; 
 }
+=======
+* {
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.vertical-align {
+    min-height: 100vh;
+    justify-content: center;
+}
+
+.is-size-1-tablet {
+    min-height: 100%;
+}
+
+.load {
+    height: 80vh;
+}
+
+.video {
+    width: 100%;
+    aspect-ratio: 4/3;
+}
+
+/* helper; disables underlining on links */
+.no-underline {
+    text-decoration: none;
+}
+
+/* From https://blog.hubspot.com/website/css-loading-animation  start*/
+.center {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+}
+
+
+.wave {
+    width: 5px;
+    height: 100px;
+    background: hsl(0, 0%, 7%);
+    margin: 10px;
+    animation: wave 1s linear infinite;
+    border-radius: 20px;
+}
+
+.wave:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.wave:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.wave:nth-child(4) {
+    animation-delay: 0.3s;
+}
+
+.wave:nth-child(5) {
+    animation-delay: 0.4s;
+}
+
+.wave:nth-child(6) {
+    animation-delay: 0.5s;
+}
+
+.wave:nth-child(7) {
+    animation-delay: 0.6s;
+}
+
+.wave:nth-child(8) {
+    animation-delay: 0.7s;
+}
+
+.wave:nth-child(9) {
+    animation-delay: 0.8s;
+}
+
+.wave:nth-child(10) {
+    animation-delay: 0.9s;
+}
+
+@keyframes wave {
+    0% {
+        transform: scale(0);
+    }
+
+    50% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(0);
+    }
+}
+/* From https://blog.hubspot.com/website/css-loading-animation  end*/
+>>>>>>> 8b522c8a4ab5bf16a9cc79b6dfabdab1a7db1de1

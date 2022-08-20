@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<<<<<<< HEAD
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/css/style.css">
     <title>Undercurrents</title>
@@ -20,5 +21,41 @@
 
    <!--Custom Script-->
    <script src=“./assets/js/script.js”></script>
+=======
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <title>Undercurrents</title>
+</head>
+<body>   
+  <!-- Search Bar Section -->
+  <header id="landing" class="hero is-flex is-flex-direction-column is-align-items-center vertical-align">
+    <h1 class="title is-size-1-mobile mt-2 mb-0">Undercurrents</h1>
+    <form class="column control is-4 has-icons-right has-text-centered" id="search-form">
+      <div class="field">
+        <p class="control has-icons-right">
+          <input type="text" id="search-input" class="input" placeholder="Artist or Band Name">
+          <span class="icon is-small is-right">
+            <i class="fas fa-search"></i>
+          </span>
+        </p>
+      </div>
+      <a class="has-text-dark" href="#history">See Past Recommendations</a>
+      <div id="header-error-message"></div>
+    </form>
+  </header>
+
+  <section id="loading" class=""></section>
+
+  <main id="main-body"></main>
+    
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"></script>
+  <!-- custom script -->
+  <script src="./assets/js/script.js"></script>
+>>>>>>> 8b522c8a4ab5bf16a9cc79b6dfabdab1a7db1de1
 </body>
 </html>
